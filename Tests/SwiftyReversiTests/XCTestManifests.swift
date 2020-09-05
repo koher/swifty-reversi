@@ -11,6 +11,7 @@ extension BoardTests {
         ("testDescription", testDescription),
         ("testFlip", testFlip),
         ("testFlipped", testFlipped),
+        ("testHasValidMoves", testHasValidMoves),
         ("testInit", testInit),
         ("testInitWithSymbolBoard", testInitWithSymbolBoard),
         ("testPlaceDiskAt", testPlaceDiskAt),
@@ -38,6 +39,7 @@ extension GameTests {
     // to regenerate.
     static let __allTests__GameTests = [
         ("testInit", testInit),
+        ("testPass", testPass),
         ("testPlaceDiskAt", testPlaceDiskAt),
     ]
 }
