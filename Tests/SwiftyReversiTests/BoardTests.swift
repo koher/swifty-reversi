@@ -373,6 +373,22 @@ final class BoardTests: XCTestCase {
         }
     }
     
+    func testHasValidMoves() {
+        do {
+            let board: Board = Board("""
+            --xxxx
+            --xooo
+            --oooo
+            -ooooo
+            oooooo
+            oooooo
+            """)
+            
+            XCTAssertEqual(board.hasValidMoves(for: .dark), false)
+            XCTAssertEqual(board.hasValidMoves(for: .light), true)
+        }
+    }
+    
     func testPlaceDiskAt() {
         do {
             var board: Board = Board("""

@@ -160,6 +160,18 @@ extension Board {
         
         return coordinates
     }
+    
+    public func hasValidMoves(for side: Disk) -> Bool {
+        for y in yRange {
+            for x in xRange {
+                if canPlaceDisk(side, atX: x, y: y) {
+                    return true
+                }
+            }
+        }
+        
+        return false
+    }
 
     public mutating func place(_ disk: Disk, atX x: Int, y: Int) throws {
         let diskCoordinates = flippedDiskCoordinatesByPlacingDisk(disk, atX: x, y: y)
