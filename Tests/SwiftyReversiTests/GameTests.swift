@@ -19,13 +19,11 @@ final class GameTests: XCTestCase {
         
         do {
             let game: Game = Game(board: Board("""
-            xxxo
-            x--x
-            xooo
-            xxxo
+            xx
+            xx
             """), turn: .light)
             
-            XCTAssertEqual(game.state, .beingPlayed(turn: .dark))
+            XCTAssertEqual(game.state, .over(winner: .dark))
         }
     }
     
@@ -58,39 +56,6 @@ final class GameTests: XCTestCase {
                 xoox
                 """))
                 XCTAssertEqual(game.state, .over(winner: .dark))
-            } catch _ {
-                XCTFail()
-            }
-        }
-        
-        do { // pass
-            var game: Game = Game(board: Board("""
-            xxxx
-            -xo-
-            -xo-
-            x---
-            """), turn: .light)
-            
-            do {
-                try game.placeDiskAt(x: 0, y: 1)
-                
-                XCTAssertEqual(game.board, Board("""
-                xxxx
-                ooo-
-                -xo-
-                x---
-                """))
-                XCTAssertEqual(game.state, .beingPlayed(turn: .dark))
-                
-                try game.placeDiskAt(x: 0, y: 2)
-                
-                XCTAssertEqual(game.board, Board("""
-                xxxx
-                xxo-
-                xxo-
-                x---
-                """))
-                XCTAssertEqual(game.state, .beingPlayed(turn: .dark))
             } catch _ {
                 XCTFail()
             }
@@ -161,6 +126,77 @@ final class GameTests: XCTestCase {
                 XCTFail()
             } catch Game.DiskPlacementError.illegalState {
                 XCTAssertEqual(game.state, .over(winner: .dark))
+            } catch _ {
+                XCTFail()
+            }
+        }
+    }
+    
+    func testPass() {
+        do { // pass
+            var game: Game = Game(board: Board("""
+            xxxx
+            -xo-
+            -xo-
+            x---
+            """), turn: .light)
+            
+            do {
+                try game.placeDiskAt(x: 0, y: 1)
+                
+                XCTAssertEqual(game.board, Board("""
+                xxxx
+                ooo-
+                -xo-
+                x---
+                """))
+                XCTAssertEqual(game.state, .beingPlayed(turn: .dark))
+                
+                try game.placeDiskAt(x: 0, y: 2)
+
+                XCTAssertEqual(game.board, Board("""
+                xxxx
+                xxo-
+                xxo-
+                x---
+                """))
+                XCTAssertEqual(game.state, .beingPlayed(turn: .light))
+                
+                try game.pass()
+
+                XCTAssertEqual(game.board, Board("""
+                xxxx
+                xxo-
+                xxo-
+                x---
+                """))
+                XCTAssertEqual(game.state, .beingPlayed(turn: .dark))
+            } catch _ {
+                XCTFail()
+            }
+        }
+        
+        do {
+            var game: Game = Game(board: Board(width: 4, height: 4), turn: .dark)
+            
+            do {
+                try game.pass()
+                XCTFail()
+            } catch Game.PassError.havingValidMoves {
+                // Do nothing
+            } catch _ {
+                XCTFail()
+            }
+        }
+        
+        do {
+            var game: Game = Game(board: Board(width: 2, height: 2), turn: .dark)
+            
+            do {
+                try game.pass()
+                XCTFail()
+            } catch Game.PassError.illegalState {
+                // Do nothing
             } catch _ {
                 XCTFail()
             }
